@@ -1,0 +1,112 @@
+-- Portfolio Database Schema - MySQL 8.0
+-- Run against: portfolio_db
+
+CREATE TABLE IF NOT EXISTS admins (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS projects (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    short_description VARCHAR(500) DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    image_url VARCHAR(500) DEFAULT NULL,
+    live_url VARCHAR(500) DEFAULT NULL,
+    source_url VARCHAR(500) DEFAULT NULL,
+    technologies JSON DEFAULT NULL,
+    featured BOOLEAN NOT NULL DEFAULT FALSE,
+    display_order INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_projects_featured (featured),
+    INDEX idx_projects_display_order (display_order)
+);
+
+CREATE TABLE IF NOT EXISTS skills (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    proficiency VARCHAR(50) DEFAULT NULL,
+    icon VARCHAR(100) DEFAULT NULL,
+    display_order INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_skills_category_order (category, display_order)
+);
+
+CREATE TABLE IF NOT EXISTS experiences (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    role VARCHAR(150) NOT NULL,
+    organization VARCHAR(200) NOT NULL,
+    location VARCHAR(150) DEFAULT NULL,
+    employment_type VARCHAR(50) DEFAULT NULL,
+    start_date DATE DEFAULT NULL,
+    end_date DATE DEFAULT NULL,
+    is_current BOOLEAN NOT NULL DEFAULT FALSE,
+    description TEXT DEFAULT NULL,
+    display_order INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_experiences_display_order (display_order)
+);
+
+CREATE TABLE IF NOT EXISTS education (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    degree VARCHAR(100) NOT NULL,
+    field_of_study VARCHAR(200) NOT NULL,
+    institution VARCHAR(200) NOT NULL,
+    board_or_university VARCHAR(200) DEFAULT NULL,
+    location VARCHAR(150) DEFAULT NULL,
+    start_date DATE DEFAULT NULL,
+    end_date DATE DEFAULT NULL,
+    cgpa DECIMAL(4,2) DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    display_order INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_education_display_order (display_order)
+);
+
+CREATE TABLE IF NOT EXISTS certifications (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    issuer VARCHAR(255) DEFAULT NULL,
+    issued_date DATE DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    certificate_url VARCHAR(500) DEFAULT NULL,
+    image_url VARCHAR(500) DEFAULT NULL,
+    display_order INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_certifications_display_order (display_order)
+);
+
+CREATE TABLE IF NOT EXISTS achievements (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    organization VARCHAR(255) DEFAULT NULL,
+    achievement_date DATE DEFAULT NULL,
+    description TEXT DEFAULT NULL,
+    image_url VARCHAR(500) DEFAULT NULL,
+    display_order INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_achievements_display_order (display_order)
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    subject VARCHAR(255) DEFAULT NULL,
+    message TEXT NOT NULL,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_messages_read_created (is_read, created_at)
+);
